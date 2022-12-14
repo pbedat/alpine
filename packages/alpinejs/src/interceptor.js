@@ -4,7 +4,13 @@
 export function initInterceptors(data) {
     let isObject = val => typeof val === 'object' && !Array.isArray(val) && val !== null
 
+    const traversed = new Set()
+
     let recurse = (obj, basePath = '') => {
+        if(traversed.has(obj)) {
+            return
+        }
+        traversed.add(obj)
         Object.entries(Object.getOwnPropertyDescriptors(obj)).forEach(([key, { value, enumerable }]) => {
             // Skip getters.
             if (enumerable === false || value === undefined) return
